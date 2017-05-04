@@ -33,14 +33,14 @@ namespace ADGTools.Library
                     for(var row = 2; row <= 1000; row++)
                     {
 
-                        var fn = (ws.Cells[row, 3] as Excel.Range).Value as string;
+                        var fn = ws.CellValueAsString(row, 3);
                         if (string.IsNullOrEmpty(fn)) break;
 
-                        var ln = (ws.Cells[row, 5] as Excel.Range).Value as string;
-                        var bd = DateTime.ParseExact((ws.Cells[row, 7] as Excel.Range).Value as string, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
-                        var ea = (ws.Cells[row, 11] as Excel.Range).Value as string;
-                        var gn = ((ws.Cells[row, 8] as Excel.Range).Value as string) == "Man" ? "M" : "F";
-                        var ii = (ws.Cells[row, 6] as Excel.Range).Value as string;
+                        var ln = ws.CellValueAsString(row, 5);
+                        var bd = DateTime.ParseExact(ws.CellValueAsString(row, 7), "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+                        var ea = ws.CellValueAsString(row, 11);
+                        var gn = ws.CellValueAsString(row, 8) == "Man" ? "M" : "F";
+                        var ii = ws.CellValueAsString(row, 6);
 
                         persons.Add(new Person
                         {
@@ -66,6 +66,60 @@ namespace ADGTools.Library
 
             return persons;
 
+        }
+
+        public static void AddFeesFromExcel(IEnumerable<Person> persons, string fileName)
+        {
+            var xl = new Excel.Application();
+            xl.Visible = true;
+
+            try
+            {
+
+                var wb = xl.Workbooks.Open(fileName);
+
+                try
+                {
+
+                    var ws = wb.Worksheets[1] as Excel._Worksheet;
+
+                    for (var row = 2; row <= 1000; row++)
+                    {
+
+                        var st = ws.CellValueAsString(row, 1);
+                        if (string.IsNullOrEmpty(st)) break;
+
+                        var am = int.Parse(ws.CellValueAsString(row, 3).Replace("kr", "").Trim());
+                        var dp = DateTime.ParseExact(ws.CellValueAsString(row, 7), "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+                        var ds = ws.CellValueAsString(row, 4);
+                        var nm = ws.CellValueAsString(row, 2);
+                        var ii = ws.CellValueAsString(row, 11);
+
+                        var fee = new Fee
+                        {
+                            Amount = am,
+                            DatePaid = dp,
+                            Description = ds,
+                            Name = nm,
+                            Status = st,
+                        };
+
+                        var pers = persons.FirstOrDefault(e => e.IdrottsID == ii);
+
+                        if (pers != null) pers.Fees.Add(fee);
+
+                    }
+
+                }
+                catch { }
+
+                wb.Close(false);
+
+            }
+            catch { }
+
+            xl.Quit();
+            
         }
 
     }
