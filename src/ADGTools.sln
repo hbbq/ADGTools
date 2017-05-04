@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26403.7
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADGTools.Library", "ADGTools.Library.csproj", "{BBA9E33D-9BD8-4437-8503-54B5C94D7668}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADGTools.Library", "ADGTools.Library\ADGTools.Library.csproj", "{BBA9E33D-9BD8-4437-8503-54B5C94D7668}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADGTools.App", "..\ADGTools.App\ADGTools.App.csproj", "{0E86ED70-C5A8-47AF-9098-19EC3484B637}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ADGTools.App", "ADGTools.App\ADGTools.App.csproj", "{0E86ED70-C5A8-47AF-9098-19EC3484B637}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
