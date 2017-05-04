@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ADGTools.Library.Models
 {
 
-    class Person
+    public class Person
     {
 
         public string IdrottsID { get; set; }
@@ -17,7 +17,7 @@ namespace ADGTools.Library.Models
         public string Gender { get; set; }
         public string EmailAddress { get; set; }
 
-        public List<Fee> Fees;
+        public List<Fee> Fees = new List<Fee>();
 
         public string FullName => $"{FirstName} {LastName}";
 

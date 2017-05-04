@@ -16,5 +16,10 @@ namespace ADGTools.App
         {
             InitializeComponent();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var ps = Library.Convert.ExcelToPersons(@"C:\Users\henber\Downloads\ExportedPersons (1).xls");
+        }
     }
 }

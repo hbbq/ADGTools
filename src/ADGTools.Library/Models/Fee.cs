@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace ADGTools.Library.Models
 {
 
-    class Fee
+    public class Fee
     {
 
         public string Name { get; set; }
