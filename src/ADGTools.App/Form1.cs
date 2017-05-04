@@ -21,10 +21,8 @@ namespace ADGTools.App
         {
             var ps = Library.Convert.ExcelToPersons(@"C:\Users\henber\Downloads\ExportedPersons (1).xls");
             Library.Convert.AddFeesFromExcel(ps, @"C:\Users\henber\Downloads\ExportFile (4).xls");
-            foreach(var p in ps.Where(o => o.IsPayingMember))
-            {
-                System.Diagnostics.Debug.WriteLine(p.FullName);
-            }
+            var js = Newtonsoft.Json.JsonConvert.SerializeObject(ps);
+            System.Diagnostics.Debug.WriteLine(js);
         }
     }
 }
