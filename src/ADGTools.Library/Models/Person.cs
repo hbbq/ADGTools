@@ -42,6 +42,8 @@ namespace ADGTools.Library.Models
 
         public bool IsPayingMember => MemberUntil.HasValue && MemberUntil.Value >= DateTime.Today;
 
+        public bool IsMember => IsPayingMember || (MemberUntil.HasValue && MemberUntil.Value.AddYears(1) >= DateTime.Today);
+
     }
 
 }
