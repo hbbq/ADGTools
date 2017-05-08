@@ -139,7 +139,19 @@ namespace ADGTools.App
 
             var ps = Library.Convert.ExcelToPersons(System.IO.Path.Combine(df, "ExportedPersons.xls"));
             Library.Convert.AddFeesFromExcel(ps, System.IO.Path.Combine(df, "ExportFile.xls"));
+            ps = ps.Where(o => o.IsMember).ToList();
             var js = Newtonsoft.Json.JsonConvert.SerializeObject(ps);
+
+            js = @"
+                var getMembers = function () {
+                    var m = {};
+                    m.date = '" + DateTime.Today.ToString("yyyy-MM-dd") + @"';
+                    m.feeYear = " + (DateTime.Today.Year - (DateTime.Today.Month < 5 ? 1 : 0)) + @";
+                    m.members = " + js + @";
+                    return m;
+                };
+            ";
+
             textBox1.Text = js;
 
         }
