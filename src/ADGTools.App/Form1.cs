@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Limilabs.FTP.Client;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -24,6 +25,8 @@ namespace ADGTools.App
         private void button2_Click(object sender, EventArgs e)
         {
 
+            ISecretInformation secret = new SecretInformation();
+
             var df = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), "DownloadedFiles");
 
             if (System.IO.Directory.Exists(df)) System.IO.Directory.Delete(df, true);
@@ -37,7 +40,7 @@ namespace ADGTools.App
             var driver = new OpenQA.Selenium.Chrome.ChromeDriver(options);
 
             driver.Navigate().GoToUrl(@"http://idrottonline.se/AlingsasDGK");
-            
+
             OpenQA.Selenium.IWebElement elm = null;
 
             while (elm == null)
@@ -51,10 +54,10 @@ namespace ADGTools.App
             System.Threading.Thread.Sleep(1000);
 
             elm = driver.FindElementById("ioui-access-username");
-            elm.SendKeys(textBox2.Text);
+            elm.SendKeys(secret.iotUser);
 
             elm = driver.FindElementById("ioui-access-password");
-            elm.SendKeys(textBox3.Text);
+            elm.SendKeys(secret.iotPassword);
 
             elm = driver.FindElementById("ioui-access-login");
             elm = elm.FindElement(OpenQA.Selenium.By.TagName("button"));
@@ -68,7 +71,7 @@ namespace ADGTools.App
             System.Threading.Thread.Sleep(5000);
 
             driver.Navigate().GoToUrl(@"https://person.idrottonline.se/search");
-            
+
             elm = null;
 
             while (elm == null)
@@ -100,7 +103,7 @@ namespace ADGTools.App
             System.Threading.Thread.Sleep(5000);
 
             driver.Navigate().GoToUrl(@"https://feeadmin.idrottonline.se/Member/Payments");
-            
+
             elm = null;
 
             while (elm == null)
@@ -112,7 +115,7 @@ namespace ADGTools.App
                 catch { }
                 System.Threading.Thread.Sleep(1000);
             }
-            
+
             elm.SendKeys("Alla");
 
             System.Threading.Thread.Sleep(5000);
@@ -140,19 +143,31 @@ namespace ADGTools.App
             var ps = Library.Convert.ExcelToPersons(System.IO.Path.Combine(df, "ExportedPersons.xls"));
             Library.Convert.AddFeesFromExcel(ps, System.IO.Path.Combine(df, "ExportFile.xls"));
             ps = ps.Where(o => o.IsMember).ToList();
-            var js = Newtonsoft.Json.JsonConvert.SerializeObject(ps);
 
-            js = @"
-                var getMembers = function () {
-                    var m = {};
-                    m.date = '" + DateTime.Today.ToString("yyyy-MM-dd") + @"';
-                    m.feeYear = " + (DateTime.Today.Year - (DateTime.Today.Month < 5 ? 1 : 0)) + @";
-                    m.members = " + js + @";
-                    return m;
-                };
-            ";
+            var dta = new DataModel
+            {
+                date = DateTime.Today.ToString("yyyy-MM-dd"),
+                feeYear = DateTime.Today.Year - (DateTime.Today.Month < 5 ? 1 : 0),
+                members = ps
+            };
 
+            var js = Newtonsoft.Json.JsonConvert.SerializeObject(dta);
+            
             textBox1.Text = js;
+
+            using(var ftp = new Ftp())
+            {
+
+                ftp.Connect("ftp.alingsasdiscgolf.se");
+
+                ftp.Login(secret.ftpUser, secret.ftpPassword);
+
+                ftp.ChangeFolder("api/members");
+                ftp.Upload("memberlist.json", System.Text.Encoding.UTF8.GetBytes(js));
+
+                ftp.Close();
+
+            }
 
         }
 
