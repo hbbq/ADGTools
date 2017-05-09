@@ -163,6 +163,7 @@ namespace ADGTools.App
                 ftp.Login(secret.ftpUser, secret.ftpPassword);
 
                 ftp.ChangeFolder("api/members");
+                ftp.DeleteFile("memberlist.json");
                 ftp.Upload("memberlist.json", System.Text.Encoding.UTF8.GetBytes(js));
 
                 ftp.Close();
