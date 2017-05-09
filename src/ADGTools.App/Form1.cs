@@ -1,4 +1,4 @@
-﻿using Limilabs.FTP.Client;
+﻿using ArxOne.Ftp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -34,6 +34,7 @@ namespace ADGTools.App
             System.IO.Directory.CreateDirectory(df);
 
             var options = new OpenQA.Selenium.Chrome.ChromeOptions();
+
             options.AddUserProfilePreference("download.default_directory", df);
             options.AddUserProfilePreference("download.prompt_for_download", false);
 
@@ -53,7 +54,22 @@ namespace ADGTools.App
 
             System.Threading.Thread.Sleep(1000);
 
-            elm = driver.FindElementById("ioui-access-username");
+            elm.Click();
+
+            System.Threading.Thread.Sleep(1000);
+
+            elm = null;
+
+            while (elm == null)
+            {
+                try
+                {
+                    elm = driver.FindElementById("ioui-access-username");
+                }
+                catch { }
+                System.Threading.Thread.Sleep(1000);
+            }
+
             elm.SendKeys(secret.iotUser);
 
             elm = driver.FindElementById("ioui-access-password");
@@ -132,7 +148,13 @@ namespace ADGTools.App
 
             System.Threading.Thread.Sleep(1000);
 
-            elm = driver.FindElementsByTagName("button").Where(o => o.Text.Contains("Exportera")).FirstOrDefault();
+            elm = null;
+
+            while (elm == null)
+            {
+                elm = driver.FindElementsByTagName("button").Where(o => o.Text.Contains("Exportera")).FirstOrDefault();
+                System.Threading.Thread.Sleep(1000);
+            }
 
             elm.Click();
 
@@ -155,21 +177,13 @@ namespace ADGTools.App
             
             textBox1.Text = js;
 
-            using(var ftp = new Ftp())
+            using (var ftp = new FtpClient(new Uri("ftp://ftp.alingsasdiscgolf.se"), new System.Net.NetworkCredential(secret.ftpUser, secret.ftpPassword)))
+            using (var str = ftp.Stor("api/members/memberlist.json", FtpTransferMode.Binary))
+            using (var sw = new System.IO.BinaryWriter(str))
             {
-
-                ftp.Connect("ftp.alingsasdiscgolf.se");
-
-                ftp.Login(secret.ftpUser, secret.ftpPassword);
-
-                ftp.ChangeFolder("api/members");
-                ftp.DeleteFile("memberlist.json");
-                ftp.Upload("memberlist.json", System.Text.Encoding.UTF8.GetBytes(js));
-
-                ftp.Close();
-
+                sw.Write(System.Text.Encoding.UTF8.GetBytes(js));
             }
-
+            
         }
 
     }
