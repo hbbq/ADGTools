@@ -11,14 +11,14 @@ namespace ADGTools.Library.Models
     public class Person
     {
 
-        [JsonIgnore] public string IdrottsID { get; set; }
+        public string IdrottsID { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        [JsonIgnore] public DateTime BirthDate { get; set; }
-        [JsonIgnore] public string Gender { get; set; }
-        [JsonIgnore] public string EmailAddress { get; set; }
+        public DateTime BirthDate { get; set; }
+        public string Gender { get; set; }
+        public string EmailAddress { get; set; }
 
-        [JsonIgnore] public List<Fee> Fees = new List<Fee>();
+        public List<Fee> Fees = new List<Fee>();
 
         public string FullName => $"{FirstName} {LastName}";
 
@@ -31,7 +31,6 @@ namespace ADGTools.Library.Models
             }
         }
 
-        [JsonIgnore]
         public DateTime? MemberUntil
         {
             get

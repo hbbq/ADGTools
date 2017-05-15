@@ -103,7 +103,7 @@ namespace ADGTools.Library
                             Name = nm,
                             Status = st,
                         };
-
+                        
                         var pers = persons.FirstOrDefault(e => e.IdrottsID == ii);
 
                         if (pers != null) pers.Fees.Add(fee);
@@ -112,7 +112,7 @@ namespace ADGTools.Library
 
                 }
                 catch { }
-
+                
                 wb.Close(false);
 
             }
@@ -120,6 +120,11 @@ namespace ADGTools.Library
 
             xl.Quit();
             
+        }
+
+        public static IEnumerable<Models.Restricted.Person> PersonsToRestrictedPersons(IEnumerable<Models.Person> persons)
+        {
+            return persons.ToRestricted();
         }
 
     }

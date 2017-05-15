@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace ADGTools.App
 {
-    public class DataModel
+    public class DataModel<T>
     {
 
         public string date { get; set; }
         public int feeYear { get; set; }
-        public List<Person> members { get; set; }
+        public List<T> members { get; set; }
 
     }
 }

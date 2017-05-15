@@ -166,7 +166,7 @@ namespace ADGTools.App
             Library.Convert.AddFeesFromExcel(ps, System.IO.Path.Combine(df, "ExportFile.xls"));
             ps = ps.Where(o => o.IsMember).ToList();
 
-            var dta = new DataModel
+            var dta = new DataModel<Library.Models.Person>
             {
                 date = DateTime.Today.ToString("yyyy-MM-dd"),
                 feeYear = DateTime.Today.Year - (DateTime.Today.Month < 5 ? 1 : 0),
@@ -174,16 +174,34 @@ namespace ADGTools.App
             };
 
             var js = Newtonsoft.Json.JsonConvert.SerializeObject(dta);
-            
+
             textBox1.Text = js;
+
+            using (var ftp = new FtpClient(new Uri("ftp://ftp.alingsasdiscgolf.se"), new System.Net.NetworkCredential(secret.ftpUser, secret.ftpPassword)))
+            using (var str = ftp.Stor("api/members/memberlistfull.json", FtpTransferMode.Binary))
+            using (var sw = new System.IO.BinaryWriter(str))
+            {
+                sw.Write(System.Text.Encoding.UTF8.GetBytes(js));
+            }
+
+            var dta2 = new DataModel<Library.Models.Restricted.Person>
+            {
+                date = DateTime.Today.ToString("yyyy-MM-dd"),
+                feeYear = DateTime.Today.Year - (DateTime.Today.Month < 5 ? 1 : 0),
+                members = Library.Convert.PersonsToRestrictedPersons(ps).ToList()
+            };
+
+            var js2 = Newtonsoft.Json.JsonConvert.SerializeObject(dta2);
+
+            textBox1.Text = js2;
 
             using (var ftp = new FtpClient(new Uri("ftp://ftp.alingsasdiscgolf.se"), new System.Net.NetworkCredential(secret.ftpUser, secret.ftpPassword)))
             using (var str = ftp.Stor("api/members/memberlist.json", FtpTransferMode.Binary))
             using (var sw = new System.IO.BinaryWriter(str))
             {
-                sw.Write(System.Text.Encoding.UTF8.GetBytes(js));
+                sw.Write(System.Text.Encoding.UTF8.GetBytes(js2));
             }
-            
+
         }
 
     }
