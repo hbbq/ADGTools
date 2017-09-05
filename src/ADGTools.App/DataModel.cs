@@ -1,12 +1,9 @@
-﻿using ADGTools.Library.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ADGTools.App
 {
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
     public class DataModel<T>
     {
 

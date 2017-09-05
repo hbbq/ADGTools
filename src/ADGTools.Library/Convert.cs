@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace ADGTools.Library
@@ -48,19 +46,25 @@ namespace ADGTools.Library
                             EmailAddress = ea,
                             FirstName = fn,
                             Gender = gn,
-                            IdrottsID = ii,
+                            IdrottsId = ii,
                             LastName = ln,
                         });
 
                     }
 
                 }
-                catch { }
+                catch
+                {
+                    // ignored
+                }
 
                 wb.Close(false);
 
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
 
             xl.Quit();
 
@@ -104,25 +108,32 @@ namespace ADGTools.Library
                             Status = st,
                         };
                         
-                        var pers = persons.FirstOrDefault(e => e.IdrottsID == ii);
+                        // ReSharper disable once PossibleMultipleEnumeration
+                        var pers = persons.FirstOrDefault(e => e.IdrottsId == ii);
 
                         if (pers != null) pers.Fees.Add(fee);
 
                     }
 
                 }
-                catch { }
-                
+                catch
+                {
+                    // ignored
+                }
+
                 wb.Close(false);
 
             }
-            catch { }
+            catch
+            {
+                // ignored
+            }
 
             xl.Quit();
             
         }
 
-        public static IEnumerable<Models.Restricted.Person> PersonsToRestrictedPersons(IEnumerable<Models.Person> persons)
+        public static IEnumerable<Models.Restricted.Person> PersonsToRestrictedPersons(IEnumerable<Person> persons)
         {
             return persons.ToRestricted();
         }

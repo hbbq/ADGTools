@@ -1,12 +1,6 @@
 ﻿using ArxOne.Ftp;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ADGTools.App
@@ -16,10 +10,6 @@ namespace ADGTools.App
         public Form1()
         {
             InitializeComponent();
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -66,7 +56,10 @@ namespace ADGTools.App
                 {
                     elm = driver.FindElementById("ioui-access-username");
                 }
-                catch { }
+                catch
+                {
+                    // ignored
+                }
                 System.Threading.Thread.Sleep(1000);
             }
 
@@ -102,19 +95,19 @@ namespace ADGTools.App
 
             elm = driver.FindElementsByTagName("a").Where(o => o.Text.Contains("Exportera")).FirstOrDefault();
 
-            elm.Click();
+            elm?.Click();
 
             System.Threading.Thread.Sleep(1000);
 
             elm = driver.FindElementsByTagName("a").Where(o => o.Text.Contains("Excel")).FirstOrDefault();
 
-            elm.Click();
+            elm?.Click();
 
             System.Threading.Thread.Sleep(1000);
 
             elm = driver.FindElementsByTagName("button").Where(o => o.Text.Contains("Exportera")).FirstOrDefault();
 
-            elm.Click();
+            elm?.Click();
 
             System.Threading.Thread.Sleep(5000);
 
@@ -128,7 +121,10 @@ namespace ADGTools.App
                 {
                     elm = driver.FindElementById("paymentsTable").FindElements(OpenQA.Selenium.By.TagName("select")).FirstOrDefault();
                 }
-                catch { }
+                catch
+                {
+                    // ignored
+                }
                 System.Threading.Thread.Sleep(1000);
             }
 
@@ -138,13 +134,13 @@ namespace ADGTools.App
 
             elm = driver.FindElementsByTagName("a").Where(o => o.Text.Contains("Exportera")).FirstOrDefault();
 
-            elm.Click();
+            elm?.Click();
 
             System.Threading.Thread.Sleep(1000);
 
             elm = driver.FindElementsByTagName("a").Where(o => o.Text.Contains("Excel, välj")).FirstOrDefault();
 
-            elm.Click();
+            elm?.Click();
 
             System.Threading.Thread.Sleep(1000);
 
@@ -178,7 +174,7 @@ namespace ADGTools.App
             textBox1.Text = js;
 
             using (var ftp = new FtpClient(new Uri("ftp://ftp.alingsasdiscgolf.se"), new System.Net.NetworkCredential(secret.ftpUser, secret.ftpPassword)))
-            using (var str = ftp.Stor("api/members/memberlistfull.json", FtpTransferMode.Binary))
+            using (var str = ftp.Stor("api/members/memberlistfull.json"))
             using (var sw = new System.IO.BinaryWriter(str))
             {
                 sw.Write(System.Text.Encoding.UTF8.GetBytes(js));
@@ -196,7 +192,7 @@ namespace ADGTools.App
             textBox1.Text = js2;
 
             using (var ftp = new FtpClient(new Uri("ftp://ftp.alingsasdiscgolf.se"), new System.Net.NetworkCredential(secret.ftpUser, secret.ftpPassword)))
-            using (var str = ftp.Stor("api/members/memberlist.json", FtpTransferMode.Binary))
+            using (var str = ftp.Stor("api/members/memberlist.json"))
             using (var sw = new System.IO.BinaryWriter(str))
             {
                 sw.Write(System.Text.Encoding.UTF8.GetBytes(js2));
