@@ -44,7 +44,7 @@ namespace ADGTools.App
 
             System.Threading.Thread.Sleep(1000);
 
-            elm.Click();
+            //elm.Click();
 
             System.Threading.Thread.Sleep(1000);
 
@@ -54,7 +54,7 @@ namespace ADGTools.App
             {
                 try
                 {
-                    elm = driver.FindElementById("ioui-access-username");
+                    elm = driver.FindElementByName("userName");
                 }
                 catch
                 {
@@ -65,11 +65,11 @@ namespace ADGTools.App
 
             elm.SendKeys(secret.iotUser);
 
-            elm = driver.FindElementById("ioui-access-password");
+            elm = driver.FindElementByName("password");
             elm.SendKeys(secret.iotPassword);
 
-            elm = driver.FindElementById("ioui-access-login");
-            elm = elm.FindElement(OpenQA.Selenium.By.TagName("button"));
+            //elm = driver.FindElementById("ioui-access-login");
+            elm = driver.FindElement(OpenQA.Selenium.By.TagName("button"));
 
             elm.Click();
 
@@ -158,7 +158,7 @@ namespace ADGTools.App
 
             driver.Quit();
 
-            var ps = Library.Convert.ExcelToPersons(System.IO.Path.Combine(df, "ExportedPersons.xls"));
+            var ps = Library.Convert.ExcelToPersons(System.IO.Path.Combine(df, "ExportedPersons.xlsx"));
             Library.Convert.AddFeesFromExcel(ps, System.IO.Path.Combine(df, "ExportFile.xls"));
             ps = ps.Where(o => o.IsMember).ToList();
 
@@ -197,6 +197,12 @@ namespace ADGTools.App
             {
                 sw.Write(System.Text.Encoding.UTF8.GetBytes(js2));
             }
+
+            var f1 = System.IO.Path.Combine(df, "memberlistfull.json");
+            var f2 = System.IO.Path.Combine(df, "memberlist.json");
+
+            System.IO.File.WriteAllText(f1, js);
+            System.IO.File.WriteAllText(f2, js2);
 
         }
 
