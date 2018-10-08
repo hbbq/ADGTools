@@ -159,7 +159,7 @@ namespace ADGTools.App
             driver.Quit();
 
             var ps = Library.Convert.ExcelToPersons(System.IO.Path.Combine(df, "ExportedPersons.xlsx"));
-            Library.Convert.AddFeesFromExcel(ps, System.IO.Path.Combine(df, "ExportFile.xls"));
+            Library.Convert.AddFeesFromExcel(ps, System.IO.Path.Combine(df, "ExportFile.xlsx"));
             ps = ps.Where(o => o.IsMember).ToList();
 
             var dta = new DataModel<Library.Models.Person>
