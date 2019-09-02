@@ -119,7 +119,7 @@ namespace ADGTools.App
             {
                 try
                 {
-                    elm = driver.FindElementById("paymentsTable").FindElements(OpenQA.Selenium.By.TagName("select")).FirstOrDefault();
+                    elm = driver.FindElementById("content").FindElements(OpenQA.Selenium.By.TagName("select")).FirstOrDefault(o => o.Location.Y > 0);
                 }
                 catch
                 {
@@ -129,6 +129,18 @@ namespace ADGTools.App
             }
 
             elm.SendKeys("Alla");
+
+            System.Threading.Thread.Sleep(1000);
+
+            elm = null;
+
+            while (elm == null)
+            {
+                elm = driver.FindElementsByTagName("button").Where(o => o.Text.Contains("Sök")).FirstOrDefault();
+                System.Threading.Thread.Sleep(1000);
+            }
+
+            elm.Click();
 
             System.Threading.Thread.Sleep(5000);
 

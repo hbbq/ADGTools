@@ -35,7 +35,12 @@ namespace ADGTools.Library
                         if (string.IsNullOrEmpty(fn)) break;
 
                         var ln = ws.CellValueAsString(row, 5);
-                        var bd = DateTime.ParseExact(ws.CellValueAsString(row, 7), "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+                        var bd = new DateTime(1901, 1, 1);
+                        try
+                        {
+                            bd = DateTime.ParseExact(ws.CellValueAsString(row, 7), "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+                        }
+                        catch { }
                         var ea = ws.CellValueAsString(row, 11);
                         var gn = ws.CellValueAsString(row, 8) == "Man" ? "M" : "F";
                         var ii = ws.CellValueAsString(row, 6);
